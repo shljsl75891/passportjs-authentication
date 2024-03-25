@@ -12,6 +12,7 @@
   "author": "sahil-jassal",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "typescript": "^5.4.3"
   },
   "dependencies": {
