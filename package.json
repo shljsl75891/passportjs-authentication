@@ -1,0 +1,20 @@
+{
+  "name": "passportjs",
+  "version": "1.0.0",
+  "description": "",
+  "exports": "./dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node ./dist/index.js"
+  },
+  "author": "sahil-jassal",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "express": "^4.19.1"
+  }
+}
