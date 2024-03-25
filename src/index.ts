@@ -13,11 +13,19 @@ const app = Express.default();
  * I am standard express cleanup part of middleware 1
  * I am standard global cleanup part of middleware
  *
+ * Response => <h1>Hello World!</h1>
+ *
  * Output: In case of error
  * I am standard global middleware
- * and then just <h1>Something went wrong</h1> is sent
+ * I am standard express middleware 1
+ * Error: Unnecessary random error
+ * I am standard express cleanup part of middleware 1
+ * I am standard global cleanup part of middleware
+ *
+ * Response => <h1>Something went wrong</h1>
  */
 
+// We can append & modify the properties in request and response in middlewares
 function globalMiddleware(
   _req: Express.Request,
   res: Express.Response,
@@ -30,20 +38,7 @@ function globalMiddleware(
   console.log("I am standard global cleanup part of middleware");
 }
 
-const errorHandler: Express.ErrorRequestHandler = (
-  err: any,
-  _req: Express.Request,
-  res: Express.Response,
-  next: Express.NextFunction,
-) => {
-  if (err) {
-    return res.send("<h1>Something went wrong</h1>");
-  }
-  next();
-};
-
 app.use(globalMiddleware);
-app.use(errorHandler);
 
 function middleware1(
   _req: Express.Request,
@@ -76,6 +71,22 @@ function stdCb(
 }
 
 app.get("/", middleware1, middleware2, stdCb); // local middlewares
+
+const errorHandler: Express.ErrorRequestHandler = (
+  err: any,
+  _req: Express.Request,
+  res: Express.Response,
+  next: Express.NextFunction,
+) => {
+  if (err) {
+    console.error("Error: " + err.message);
+    return res.send("<h1>Something went wrong</h1>");
+  }
+  next();
+};
+
+// Error will be caught gracefully if any of the middlewares fail
+app.use(errorHandler);
 
 app.listen(3000, function () {
   console.log("the server is running on port 3000");
