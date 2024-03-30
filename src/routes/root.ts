@@ -1,8 +1,7 @@
 import express from "express";
-import { getGreet } from "../controllers/greet.js";
 
 const router = express.Router();
 
-router.route("/").get(getGreet);
+router.route("/").get();
 
 export default router;
