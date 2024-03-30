@@ -6,22 +6,16 @@ import {
   Model,
 } from "sequelize";
 import { sequelize } from "../config/database.js";
-import { IUser } from "../types.js";
 
-export default class User
-  extends Model<InferAttributes<User>, InferCreationAttributes<User>>
-  implements IUser
-{
+export default class User extends Model<
+  InferAttributes<User>,
+  InferCreationAttributes<User>
+> {
   declare id: CreationOptional<string>;
-  declare firstName: string;
-  declare lastName: string;
+  declare username: string;
   declare email: string;
   declare hash: string;
   declare salt: string;
-
-  getFullName(): string {
-    return `${this.firstName} ${this.lastName}`;
-  }
 }
 
 User.init(
@@ -31,21 +25,12 @@ User.init(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    firstName: {
+    username: {
       type: DataTypes.STRING,
       allowNull: false,
       field: "first_name",
       validate: {
         isAlpha: { msg: "First name must contains only alphabetic characters" },
-        max: 10,
-      },
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      field: "last_name",
-      validate: {
-        isAlpha: { msg: "Last name must contains only alphabetic characters" },
         max: 10,
       },
     },
