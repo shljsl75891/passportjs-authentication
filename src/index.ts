@@ -1,36 +1,17 @@
-import pgSession from "connect-pg-simple";
+import "dotenv/config";
 import express from "express";
-import expressSession from "express-session";
-import { pgPool } from "./config/database.js";
+import rootRouter from "./routes/root.js";
+import session from "./session.js";
 
 const app = express();
 
-const pgStore = pgSession(expressSession);
 
-const sessionStore = new pgStore({
-  pool: pgPool,
-});
+app.use(session);
 
-app.use(
-  expressSession({
-    store: sessionStore,
-    secret: process.env.SESSION_SECRET ?? "secret",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 },
-  }),
-);
+app.use("/", rootRouter);
 
-app.get("/", function (req, res) {
-  if (req.session.visited) {
-    req.session.visited++;
-  } else {
-    req.session.visited = 1;
-  }
+app.listen(3000, onServerStart);
 
-  res.send(`<h1>You have visited this session: ${req.session.visited}</h1>`);
-});
-
-app.listen(3000, function () {
+async function onServerStart() {
   console.log("the server is running on port 3000");
-});
+}
